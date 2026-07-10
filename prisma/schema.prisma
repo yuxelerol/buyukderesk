@@ -1,0 +1,147 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          String    @default("admin")
+  accounts      Account[]
+  sessions      Session[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model SiteSettings {
+  id              String  @id @default("main")
+  clubName        String  @default("Eskişehir Gücü Futbol Kulübü")
+  slogan          String  @default("Gücümüz Birliğimizden Gelir")
+  logoPath        String?
+  logoIsPublic    Boolean @default(true)
+  address         String  @default("Eskişehir, Türkiye")
+  phone           String  @default("")
+  email           String  @default("")
+  mapsEmbed       String  @default("")
+  facebook        String  @default("")
+  twitter         String  @default("")
+  instagram       String  @default("")
+  youtube         String  @default("")
+  aboutText       String  @default("") @db.Text
+  historyText     String  @default("") @db.Text
+  updatedAt       DateTime @updatedAt @default(now())
+}
+
+model News {
+  id          String   @id @default(cuid())
+  title       String
+  content     String   @db.Text
+  summary     String   @default("")
+  coverPath   String?
+  coverIsPublic Boolean @default(true)
+  published   Boolean  @default(true)
+  publishDate DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([publishDate(sort: Desc)])
+}
+
+model Activity {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  imagePath   String?
+  imageIsPublic Boolean @default(true)
+  activityDate DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([activityDate(sort: Desc)])
+}
+
+model BoardMember {
+  id          String  @id @default(cuid())
+  name        String
+  title       String
+  photoPath   String?
+  photoIsPublic Boolean @default(true)
+  sortOrder   Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([sortOrder])
+}
+
+model GalleryPhoto {
+  id          String   @id @default(cuid())
+  imagePath   String
+  imageIsPublic Boolean @default(true)
+  caption     String   @default("")
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([sortOrder])
+}
+
+model GalleryVideo {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @default("")
+  videoUrl    String
+  createdAt   DateTime @default(now())
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String   @default("")
+  message   String   @db.Text
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt(sort: Desc)])
+}
