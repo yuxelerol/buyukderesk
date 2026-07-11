@@ -26,7 +26,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { logoUrl, ...data } = body ?? {};
+    const { logoUrl, heroBackgroundUrl, id, updatedAt, ...data } = body ?? {};
 
     const settings = await prisma.siteSettings.upsert({
       where: { id: "main" },
