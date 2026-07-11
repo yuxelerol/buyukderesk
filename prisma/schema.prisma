@@ -71,6 +71,7 @@ model SiteSettings {
   youtube         String  @default("")
   aboutText       String  @default("") @db.Text
   historyText     String  @default("") @db.Text
+  heroBackground  String?
   updatedAt       DateTime @updatedAt @default(now())
 }
 
