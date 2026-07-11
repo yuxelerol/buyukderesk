@@ -71,6 +71,16 @@ export function SettingsAdminClient() {
                 label="Logo Yükle"
               />
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-1">Ana Sayfa Arka Plan Görseli</label>
+              <FileUpload
+                currentUrl={form?.heroBackgroundUrl}
+                onUpload={(url) => { update("heroBackground", url); }}
+                onRemove={() => { update("heroBackground", null); }}
+                label="Arka Plan Yükle"
+              />
+              <p className="text-xs text-gray-500 mt-1">Önerilen boyut: 1920x1080 piksel, yatay format</p>
+            </div>
           </div>
         </div>
 
