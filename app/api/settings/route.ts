@@ -12,7 +12,7 @@ export async function GET() {
       settings = await prisma.siteSettings.create({ data: { id: "main" } });
     }
 
-    return NextResponse.json({ ...(settings ?? {}), logoUrl: settings?.logoPath || null });
+    return NextResponse.json({ ...(settings ?? {}), logoUrl: settings?.logoPath || null, heroBackgroundUrl: settings?.heroBackground || null });
   } catch (error: any) {
     return NextResponse.json({ error: "Sunucu hatası" }, { status: 500 });
   }
