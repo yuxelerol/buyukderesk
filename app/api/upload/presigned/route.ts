@@ -25,6 +25,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ url: publicUrl });
   } catch (error: any) {
     console.error("Upload hatası:", error);
-    return NextResponse.json({ error: "Yükleme hatası" }, { status: 500 });
+    return NextResponse.json({ 
+      error: "Yükleme hatası", 
+      details: error?.message || String(error),
+      envCheck: {
+        hasProjectId: !!process.env.FIREBASE_PROJECT_ID,
+        hasClientEmail: !!process.env.FIREBASE_CLIENT_EMAIL,
+        hasPrivateKey: !!process.env.FIREBASE_PRIVATE_KEY,
+        hasStorageBucket: !!process.env.FIREBASE_STORAGE_BUCKET,
+      }
+    }, { status: 500 });
   }
 }
