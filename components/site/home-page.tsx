@@ -29,6 +29,7 @@ interface Settings {
   slogan: string | null;
   logoUrl: string | null;
   aboutText: string | null;
+  heroBackgroundUrl: string | null;
 }
 
 export function HomePageClient() {
@@ -54,9 +55,27 @@ export function HomePageClient() {
     <div>
       {/* Hero Section */}
       <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0a] via-[#1a0000] to-[#0a0a0a]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(204,0,0,0.15),transparent_70%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(204,0,0,0.1),transparent_60%)]" />
+        {settings?.heroBackgroundUrl ? (
+          <>
+            <div className="absolute inset-0">
+              <Image
+                src={settings.heroBackgroundUrl}
+                alt="Arka plan"
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+            <div className="absolute inset-0 bg-black/60" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-[#0a0a0a]/50" />
+          </>
+        ) : (
+          <>
+            <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0a] via-[#1a0000] to-[#0a0a0a]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(204,0,0,0.15),transparent_70%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(204,0,0,0.1),transparent_60%)]" />
+          </>
+        )}
 
         {/* Animated lines */}
         <div className="absolute inset-0 overflow-hidden">
