@@ -8,7 +8,13 @@ function getFirebaseApp(): App {
     return getApps()[0];
   }
 
-  const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
+  let privateKey = process.env.FIREBASE_PRIVATE_KEY || "";
+  // Handle various formats of private key in environment variables
+  // Vercel may wrap the value in quotes or escape newlines differently
+  if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
+    privateKey = privateKey.slice(1, -1);
+  }
+  privateKey = privateKey.replace(/\\n/g, "\n");
 
   app = initializeApp({
     credential: cert({
